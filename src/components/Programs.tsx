@@ -102,7 +102,7 @@ const Programs = () => {
                   <td className="p-3">07:30 – 12:20</td>
                 </tr>
                 <tr className="border-t border-border">
-                  <td className="p-3">Grades 1–12 (Commerce)</td>
+                  <td className="p-3">Grades 11–12 (Commerce)</td>
                   <td className="p-3">07:30 – 12:20</td>
                 </tr>
                 <tr className="border-t border-border">
