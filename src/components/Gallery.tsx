@@ -5,12 +5,12 @@ const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
 
   const images = [
-    { url: new URL("../../images/DSCN6035.JPG", import.meta.url).href, title: "Campus View" },
-    { url: new URL("../../images/DSCN6042.JPG", import.meta.url).href, title: "Classroom" },
-    { url: new URL("../../images/DSCN6039.JPG", import.meta.url).href, title: "Science Lab" },
-    { url: new URL("../../images/DSCN6015.JPG", import.meta.url).href, title: "Library" },
-    { url: new URL("../../images/DJI_20251015175722_0001_D.JPG", import.meta.url).href, title: "Campus Aerial 1" },
-    { url: new URL("../../images/DJI_20251015180411_0004_D.JPG", import.meta.url).href, title: "Campus Aerial 2" },
+    { url: new URL("../../images/Science Lab.JPG", import.meta.url).href, alt: "Science Lab" },
+    { url: new URL("../../images/phy lab.JPG", import.meta.url).href, alt: "Physics Lab" },
+    { url: new URL("../../images/bio lab.JPG", import.meta.url).href, alt: "Biology Lab" },
+    { url: new URL("../../images/ground.JPG", import.meta.url).href, alt: "Playground" },
+    { url: new URL("../../images/arial photo.JPG", import.meta.url).href, alt: "Campus Aerial" },
+    { url: new URL("../../images/DSCN6015.JPG", import.meta.url).href, alt: "Library" },
   ];
 
   const openLightbox = (index: number) => setSelectedImage(index);
@@ -54,14 +54,9 @@ const Gallery = () => {
             >
               <img
                 src={image.url}
-                alt={image.title}
+                alt={image.alt}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <h3 className="text-primary-foreground font-semibold">{image.title}</h3>
-                </div>
-              </div>
             </div>
           ))}
         </div>
@@ -98,12 +93,9 @@ const Gallery = () => {
           <div className="max-w-4xl max-h-[80vh]">
             <img
               src={images[selectedImage].url}
-              alt={images[selectedImage].title}
+              alt={images[selectedImage].alt}
               className="max-w-full max-h-[80vh] object-contain rounded-lg"
             />
-            <p className="text-primary-foreground text-center mt-4 font-medium">
-              {images[selectedImage].title}
-            </p>
           </div>
 
           <button
