@@ -5,12 +5,12 @@ const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
 
   const images = [
+    { url: new URL("../../images/main first image campus veiw .JPG", import.meta.url).href, alt: "Campus View" },
     { url: new URL("../../images/Science Lab.JPG", import.meta.url).href, alt: "Science Lab" },
     { url: new URL("../../images/phy lab.JPG", import.meta.url).href, alt: "Physics Lab" },
     { url: new URL("../../images/bio lab.JPG", import.meta.url).href, alt: "Biology Lab" },
     { url: new URL("../../images/ground.JPG", import.meta.url).href, alt: "Playground" },
     { url: new URL("../../images/arial photo.JPG", import.meta.url).href, alt: "Campus Aerial" },
-    { url: new URL("../../images/DSCN6015.JPG", import.meta.url).href, alt: "Library" },
   ];
 
   const openLightbox = (index: number) => setSelectedImage(index);
