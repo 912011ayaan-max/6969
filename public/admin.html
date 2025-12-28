@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — Crescent School</title>
+  <link rel="icon" type="image/png" href="/CS_Logo[1].png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <style>
+    :root{
+      --bg:#0A1D14;
+      --card:#111f19;
+      --border:#214131;
+      --accent:#CAA64A;
+      --text:#e9f2ed;
+      --muted:#9fb5aa;
+      --danger:#b84b4b;
+      --radius:14px
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(135deg,#074724 0%, #1a3a2d 100%);color:var(--text)}
+    a{color:var(--accent);text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:20px}
+    header{position:sticky;top:0;z-index:10;background:rgba(0,0,0,.2);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.1)}
+    nav{display:flex;align-items:center;justify-content:space-between;padding:12px 20px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{width:40px;height:40px;border-radius:10px;background:#fff}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap}
+    .tabs button{border:1px solid var(--border);background:#0f2119;color:var(--text);padding:8px 12px;border-radius:999px;cursor:pointer}
+    .tabs button.active{background:var(--accent);color:#06361f;border-color:var(--accent);font-weight:700}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .col-6{grid-column:span 6}
+    .col-12{grid-column:span 12}
+    @media(max-width:900px){.col-6{grid-column:span 12}}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+    .card h3{margin:0 0 10px;color:var(--accent)}
+    .input{width:100%;background:#0c1b15;border:1px solid var(--border);color:var(--text);padding:10px;border-radius:10px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#123223;color:var(--text);cursor:pointer}
+    .btn.primary{background:#0F6F3A;border-color:#0F6F3A;color:#fff}
+    .btn.warn{background:#2d2b16;border-color:#755e1b;color:#f9e6b3}
+    .btn.danger{background:#2a1515;border-color:#7a2b2b;color:#f9d2d2}
+    table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+    th,td{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06)}
+    thead th{background:rgba(255,255,255,.06);text-align:left;color:var(--accent)}
+    .item-row{display:flex;gap:10px;align-items:center}
+    .muted{color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="wrap">
+      <div class="brand">
+        <img src="/CS_Logo[1].png" alt="Logo">
+        <div>
+          <div style="font-weight:800;color:var(--accent)">Crescent School</div>
+          <div class="muted" style="font-size:.85rem">Admin Panel</div>
+        </div>
+      </div>
+      <div class="tabs">
+        <button class="active" id="tab-notices">Notices</button>
+        <button id="tab-events">Events</button>
+      </div>
+    </nav>
+  </header>
+
+  <div class="wrap">
+    <div class="grid">
+      <div class="col-6">
+        <div class="card">
+          <h3 id="form-title">Add Notice</h3>
+          <div class="row">
+            <div>
+              <label class="muted">Type</label>
+              <input id="type" class="input" placeholder="Notice, Event, Exam, Holiday">
+            </div>
+            <div>
+              <label class="muted">Title</label>
+              <input id="title" class="input" placeholder="Title">
+            </div>
+          </div>
+          <div style="margin-top:12px">
+            <label class="muted">Description</label>
+            <textarea id="description" class="input" rows="4" placeholder="Description"></textarea>
+          </div>
+          <div class="actions" style="margin-top:12px">
+            <button class="btn primary" id="btn-submit">Add</button>
+            <button class="btn warn" id="btn-reset">Reset</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="card">
+          <h3 id="list-title">Latest Notices</h3>
+          <div id="list">
+            <table>
+              <thead>
+                <tr><th>Type</th><th>Title</th><th>Description</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="card">
+          <div class="muted">Tips: Use Type to categorize items. Items show newest first. Click Edit to modify an item or Delete to remove it.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBZkf83jEGeffLNF0vFvnv6U8kRkRZXpI8",
+      authDomain: "ool-site-updates.firebaseapp.com",
+      databaseURL: "https://ool-site-updates-default-rtdb.firebaseio.com",
+      projectId: "ool-site-updates",
+      storageBucket: "ool-site-updates.firebasestorage.app",
+      messagingSenderId: "1045153400854",
+      appId: "1:1045153400854:web:4ed7fafe18c9c542fe4d37",
+      measurementId: "G-DFP7LC9YMQ"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let activeNode = "notices";
+    let editKey = null;
+
+    const tabNotices = document.getElementById("tab-notices");
+    const tabEvents = document.getElementById("tab-events");
+    const formTitle = document.getElementById("form-title");
+    const listTitle = document.getElementById("list-title");
+    const typeEl = document.getElementById("type");
+    const titleEl = document.getElementById("title");
+    const descEl = document.getElementById("description");
+    const btnSubmit = document.getElementById("btn-submit");
+    const btnReset = document.getElementById("btn-reset");
+    const tbody = document.getElementById("tbody");
+
+    function setActive(node){
+      activeNode = node;
+      editKey = null;
+      formTitle.textContent = node === "notices" ? "Add Notice" : "Add Event";
+      listTitle.textContent = node === "notices" ? "Latest Notices" : "Latest Events";
+      btnSubmit.textContent = "Add";
+      typeEl.value = "";
+      titleEl.value = "";
+      descEl.value = "";
+      loadList();
+    }
+
+    tabNotices.addEventListener("click",()=>{
+      tabNotices.classList.add("active");
+      tabEvents.classList.remove("active");
+      setActive("notices");
+    });
+    tabEvents.addEventListener("click",()=>{
+      tabEvents.classList.add("active");
+      tabNotices.classList.remove("active");
+      setActive("events");
+    });
+
+    btnReset.addEventListener("click",()=>{
+      editKey = null;
+      btnSubmit.textContent = "Add";
+      typeEl.value = "";
+      titleEl.value = "";
+      descEl.value = "";
+    });
+
+    btnSubmit.addEventListener("click",()=>{
+      const type = typeEl.value.trim() || (activeNode === "notices" ? "Notice" : "Event");
+      const title = titleEl.value.trim();
+      const description = descEl.value.trim();
+      if(!title || !description){ alert("Fill title and description"); return; }
+      if(editKey){
+        db.ref(`${activeNode}/${editKey}`).update({ type, title, description }).then(()=>{
+          editKey = null;
+          btnSubmit.textContent = "Add";
+          typeEl.value = "";
+          titleEl.value = "";
+          descEl.value = "";
+        });
+      }else{
+        const payload = { type, title, description, timestamp: Date.now() };
+        db.ref(activeNode).push(payload).then(()=>{
+          typeEl.value = "";
+          titleEl.value = "";
+          descEl.value = "";
+        });
+      }
+    });
+
+    function loadList(){
+      db.ref(activeNode).orderByChild("timestamp").limitToLast(100).on("value",(snap)=>{
+        const items = [];
+        snap.forEach(child=>items.push({ key: child.key, ...child.val() }));
+        items.reverse();
+        renderTable(items);
+      });
+    }
+
+    function renderTable(items){
+      tbody.innerHTML = "";
+      if(items.length === 0){
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 4;
+        td.textContent = "No items";
+        td.className = "muted";
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+      items.forEach(item=>{
+        const tr = document.createElement("tr");
+        const tdType = document.createElement("td");
+        const tdTitle = document.createElement("td");
+        const tdDesc = document.createElement("td");
+        const tdActions = document.createElement("td");
+        tdType.textContent = item.type || (activeNode === "notices" ? "Notice" : "Event");
+        tdTitle.textContent = item.title || "";
+        tdDesc.textContent = item.description || "";
+        const editBtn = document.createElement("button");
+        editBtn.className = "btn warn";
+        editBtn.textContent = "Edit";
+        editBtn.onclick = ()=>{
+          editKey = item.key;
+          btnSubmit.textContent = "Save";
+          typeEl.value = item.type || "";
+          titleEl.value = item.title || "";
+          descEl.value = item.description || "";
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        };
+        const delBtn = document.createElement("button");
+        delBtn.className = "btn danger";
+        delBtn.textContent = "Delete";
+        delBtn.onclick = ()=>{
+          if(confirm("Delete this item?")){
+            db.ref(`${activeNode}/${item.key}`).remove();
+          }
+        };
+        tdActions.appendChild(editBtn);
+        tdActions.appendChild(delBtn);
+        tr.appendChild(tdType);
+        tr.appendChild(tdTitle);
+        tr.appendChild(tdDesc);
+        tr.appendChild(tdActions);
+        tbody.appendChild(tr);
+      });
+    }
+
+    setActive("notices");
+  </script>
+</body>
+</html>

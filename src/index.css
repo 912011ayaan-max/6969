@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 45 30% 97%;
+    --foreground: 145 50% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 145 50% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 145 50% 12%;
+
+    --primary: 145 63% 22%;
+    --primary-foreground: 45 60% 95%;
+
+    --secondary: 45 70% 50%;
+    --secondary-foreground: 145 50% 12%;
+
+    --muted: 45 20% 92%;
+    --muted-foreground: 145 30% 35%;
+
+    --accent: 45 80% 55%;
+    --accent-foreground: 145 50% 12%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 145 20% 85%;
+    --input: 145 20% 85%;
+    --ring: 145 63% 22%;
+
+    --radius: 0.75rem;
+
+    /* Custom School Theme Colors */
+    --school-green: 145 63% 22%;
+    --school-green-light: 145 40% 35%;
+    --school-green-dark: 145 70% 15%;
+    --school-gold: 45 80% 50%;
+    --school-gold-light: 45 80% 65%;
+    --school-gold-dark: 45 70% 40%;
+    --school-cream: 45 30% 95%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(145, 63%, 22%) 0%, hsl(145, 70%, 15%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(45, 80%, 50%) 0%, hsl(45, 70%, 40%) 100%);
+    --gradient-overlay: linear-gradient(180deg, rgba(27, 94, 32, 0.85) 0%, rgba(27, 94, 32, 0.95) 100%);
+
+    /* Shadows */
+    --shadow-soft: 0 4px 20px -4px hsla(145, 63%, 22%, 0.15);
+    --shadow-gold: 0 4px 20px -4px hsla(45, 80%, 50%, 0.3);
+    --shadow-elevated: 0 20px 60px -15px hsla(145, 63%, 22%, 0.25);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 145 50% 8%;
+    --foreground: 45 30% 95%;
+
+    --card: 145 40% 12%;
+    --card-foreground: 45 30% 95%;
+
+    --popover: 145 40% 12%;
+    --popover-foreground: 45 30% 95%;
+
+    --primary: 45 80% 55%;
+    --primary-foreground: 145 50% 12%;
+
+    --secondary: 145 40% 25%;
+    --secondary-foreground: 45 30% 95%;
+
+    --muted: 145 30% 18%;
+    --muted-foreground: 45 20% 70%;
+
+    --accent: 45 70% 50%;
+    --accent-foreground: 145 50% 12%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 145 30% 20%;
+    --input: 145 30% 20%;
+    --ring: 45 80% 55%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer utilities {
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(45, 80%, 55%) 0%, hsl(45, 70%, 45%) 100%);
+  }
+
+  .bg-gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .bg-gradient-gold {
+    background: var(--gradient-gold);
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-gold {
+    box-shadow: var(--shadow-gold);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+}
+
+/* Custom Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-shimmer {
+  animation: shimmer 3s linear infinite;
+  background-size: 200% 100%;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animation-delay-100 { animation-delay: 100ms; }
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-300 { animation-delay: 300ms; }
+.animation-delay-400 { animation-delay: 400ms; }
+.animation-delay-500 { animation-delay: 500ms; }
