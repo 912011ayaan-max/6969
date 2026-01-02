@@ -1,6 +1,21 @@
 import { ChevronDown } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Hero = () => {
+  const [admText, setAdmText] = useState("Admissions Open 2025-26");
+
+  useEffect(() => {
+    const url = "https://ool-site-updates-default-rtdb.firebaseio.com/admissions_text.json";
+    fetch(url)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((txt) => {
+        if (typeof txt === "string" && txt.trim().length) {
+          setAdmText(txt);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section
       id="home"
@@ -31,7 +46,7 @@ const Hero = () => {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-school-gold/20 rounded-full text-school-gold mb-8 animate-fade-in-up">
             <span className="w-2 h-2 bg-school-gold rounded-full animate-pulse" />
-            <span className="text-sm font-medium">Admissions Open 2025-26</span>
+            <span className="text-sm font-medium">{admText}</span>
           </div>
 
           {/* Main Heading */}
