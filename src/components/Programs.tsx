@@ -44,6 +44,20 @@ const Programs = () => {
       description: "Affiliated with Gujarat Secondary and Higher Secondary Education Board (GSEB).",
       color: "bg-primary/10 text-primary",
     },
+    {
+      icon: GraduationCap,
+      title: "Higher Secondary (Commerce)",
+      grades: "Class 11–12 Commerce",
+      description: "Commerce stream with focus on accountancy, business studies, economics, and mathematics, preparing students for professional courses.",
+      color: "bg-amber-500/10 text-amber-600",
+    },
+    {
+      icon: FlaskConical,
+      title: "Higher Secondary (Science)",
+      grades: "Class 11–12 Science",
+      description: "Science stream with physics, chemistry, biology, and mathematics, emphasizing lab work and competitive exam readiness.",
+      color: "bg-teal-500/10 text-teal-600",
+    },
   ];
 
   return (
@@ -63,7 +77,7 @@ const Programs = () => {
         </div>
 
         {/* Programs Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {programs.map((program, index) => (
             <div
               key={program.title}
